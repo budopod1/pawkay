@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/runner/Chess/main.csproj",
+      "projectUniqueName": "/home/runner/Lincons/main.csproj",
       "projectName": "main",
-      "projectPath": "/home/runner/Chess/main.csproj",
+      "projectPath": "/home/runner/Lincons/main.csproj",
       "packagesPath": "/home/runner/.nuget/packages/",
-      "outputPath": "/home/runner/Chess/obj/",
+      "outputPath": "/home/runner/Lincons/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/runner/.nuget/NuGet/NuGet.Config"
