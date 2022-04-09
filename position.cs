@@ -47,14 +47,16 @@ class Position {
         return null;
     }
 
-    public bool IsKingCheck(int startX, int startY, int endX, int endY) {
-        Position moved = Move(startX, startY, endX, endY);
+    public bool IsKingCheck(Move moveToCheck) {
+        Position moved = moveToCheck.Perform(this);
         int[] kingPosition = moved.GetKing(turn);
         int kingX = kingPosition[0];
         int kingY = kingPosition[1];
-        foreach (int[] move in moved.AllMoves(false)) {
-            if (move[0] == kingX && move[1] == kingY) {
-                return true;
+        foreach (Move move in moved.AllMoves(false)) {
+            for (int i = 0; i < move.endXs.Length; i++) {
+                if (move.endXs[i] == kingX && move.endYs[i] == kingY) {
+                    return true;
+                }
             }
         }
         return false;
@@ -65,7 +67,7 @@ class Position {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Piece piece = GetPiece(x, y);
-                piece = (Piece)piece.Clone();
+                piece = piece.Clone();
                 piece.position = boardCopy;
                 boardCopy.board[x, y] = piece;
             }
@@ -82,8 +84,8 @@ class Position {
         }
     }
 
-    public List<int[]> AllMoves(bool checkCheck=true) {
-        List<int[]> allMoves = new List<int[]>();
+    public List<Move> AllMoves(bool checkCheck=true) {
+        List<Move> allMoves = new List<Move>();
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Piece piece = GetPiece(x, y);

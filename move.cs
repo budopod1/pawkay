@@ -27,6 +27,7 @@ class Move {
     }
 
     public Position Perform(Position oldPosition) {
+        // Console.WriteLine(oldPosition);
         Position newPosition = oldPosition.CopyBoard();
         newPosition.SwapTurn();
         for (int i = 0; i < startXs.Length; i++) {
@@ -45,5 +46,18 @@ class Move {
             newPosition.SetPiece(capture[0], capture[1], new EmptyPiece(newPosition));
         }
         return newPosition;
+    }
+
+    public override string ToString() {
+        string output = "";
+        
+        for (int i = 0; i < startXs.Length; i++) {
+            string at = $"({startXs[i]}, {startYs[i]})";
+            string to = $"({endXs[i]}, {endYs[i]})";
+            output = $"Move piece at {at} to {to}";
+        }
+
+        // TODO Add support for takes and switches
+        return output;
     }
 }
