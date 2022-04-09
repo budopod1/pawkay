@@ -32,8 +32,7 @@ Bishop - B
         choice = Input.Option(new string[] {"bot", "human"});
         */
         
-        Position position = new Position();
-        position.DefaultPosition();
+        Position position = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
         Console.WriteLine();
         while (true) {
             Console.WriteLine(position);

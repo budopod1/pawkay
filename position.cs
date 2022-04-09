@@ -127,48 +127,45 @@ class Position {
         return text;
     }
 
-    public void DefaultPosition() {
-        for (int y = 0; y < 8; y++) {
-            Turn turn = Turn.None;
-            if (y == 1 || y == 0) {
-                turn = Turn.White;
-            } else if (y == 6 || y == 7) {
-                turn = Turn.Black;
-            }
-            for (int x = 0; x < 8; x++) {
-                Piece piece = new EmptyPiece(this);
-                if (y == 1 || y == 6) {
-                    piece = new PawnPiece(turn, this);
-                } else if (y == 0 || y == 7) {
-                    switch(x) {
-                        case 0:
-                            piece = new RookPiece(turn, this);
-                            break;
-                        case 1:
-                            piece = new KnightPiece(turn, this);
-                            break;
-                        case 2:
-                            piece = new BishopPiece(turn, this);
-                            break;
-                        case 3:
-                            piece = new QueenPiece(turn, this);
-                            break;
-                        case 4:
-                            piece = new KingPiece(turn, this);
-                            break;
-                        case 5:
-                            piece = new BishopPiece(turn, this);
-                            break;
-                        case 6:
-                            piece = new KnightPiece(turn, this);
-                            break;
-                        case 7:
-                            piece = new RookPiece(turn, this);
-                            break;
+    public static Position fromFEN(string FEN) {
+        string[] parts = FEN.Split(" ");
+        Position position = new Position();
+
+        string[] rows = parts[0].Split("/");
+        int y = 7;
+        foreach (string row in rows) {
+            int x = 0;
+            foreach (char pieceChar in row) {
+                int emptyNum;
+                if (int.TryParse(pieceChar.ToString(), out emptyNum)) {
+                    for (int i = 0; i < emptyNum; i++) {
+                        position.board[x, y] = new EmptyPiece(position);
+                        x += 1;
                     }
+                } else {
+                    char piece = char.ToLower(pieceChar);
+                    Turn pieceOwner = pieceChar == piece ? Turn.Black : Turn.White;
+                    PieceType pieceType = new Dictionary<char, PieceType>() {
+                        {'k', PieceType.King},
+                        {'p', PieceType.Pawn},
+                        {'n', PieceType.Knight},
+                        {'b', PieceType.Bishop},
+                        {'q', PieceType.Queen},
+                        {'r', PieceType.Rook}
+                    }[piece];
+                    position.board[x, y] = Piece.Create(pieceType, pieceOwner, position);
+                    x += 1;
                 }
-                board[x, y] = (Piece)piece;
             }
+            y -= 1;
         }
+        
+        if (parts[1] == "w") {
+            position.turn = Turn.White;
+        } else {
+            position.turn = Turn.Black;
+        }
+
+        return position;
     }
 }
