@@ -10,7 +10,7 @@ class Position {
     public Position() {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                board[x, y] = new EmptyPiece(this);
+                SetPiece(x, y, new EmptyPiece(this));
             }
         }
     }
@@ -69,7 +69,7 @@ class Position {
                 Piece piece = GetPiece(x, y);
                 piece = piece.Clone();
                 piece.position = boardCopy;
-                boardCopy.board[x, y] = piece;
+                SetPiece(x, y, piece);
             }
         }
         boardCopy.turn = turn;
@@ -95,16 +95,6 @@ class Position {
             }
         }
         return allMoves;
-    }
-
-    public Position Move(int startX, int startY, int endX, int endY) {
-        Position newPosition = CopyBoard();
-        Piece startPiece = newPosition.GetPiece(startX, startY);
-        startPiece.moved = true;
-        newPosition.board[startX, startY] = new EmptyPiece(newPosition);
-        newPosition.board[endX, endY] = startPiece;
-        newPosition.SwapTurn();
-        return newPosition;
     }
 
     public override string ToString() {
@@ -139,7 +129,7 @@ class Position {
                 int emptyNum;
                 if (int.TryParse(pieceChar.ToString(), out emptyNum)) {
                     for (int i = 0; i < emptyNum; i++) {
-                        position.board[x, y] = new EmptyPiece(position);
+                        position.SetPiece(x, y, new EmptyPiece(position));
                         x += 1;
                     }
                 } else {
@@ -153,7 +143,7 @@ class Position {
                         {'q', PieceType.Queen},
                         {'r', PieceType.Rook}
                     }[piece];
-                    position.board[x, y] = Piece.Create(pieceType, pieceOwner, position);
+                    position.SetPiece(x, y, Piece.Create(pieceType, pieceOwner, position));
                     x += 1;
                 }
             }
