@@ -10,12 +10,14 @@ class Move {
     public int[] endYs;
     public List<int[]> captures;
     public PieceType turnTo;
+    public int[] enPassant;
     
-    public Move(int[] startXs, int[] startYs, int[] endXs, int[] endYs, List<int[]> captures=null, PieceType turnTo=PieceType.Copy) {
+    public Move(int[] startXs, int[] startYs, int[] endXs, int[] endYs, List<int[]> captures=null, PieceType turnTo=PieceType.Copy, int[] enPassant=null) {
         this.startXs = startXs;
         this.startYs = startYs;
         this.endXs = endXs;
         this.endYs = endYs;
+        this.enPassant = enPassant;
         
         if (captures != null) {
             this.captures = captures;
@@ -29,6 +31,9 @@ class Move {
     public Position Perform(Position oldPosition) {
         // Console.WriteLine(oldPosition);
         Position newPosition = oldPosition.CopyBoard();
+        if (newPosition.turn == Turn.Black) {
+            newPosition.turnNum++;
+        }
         newPosition.SwapTurn();
         for (int i = 0; i < startXs.Length; i++) {
             int startX = startXs[i];
@@ -45,6 +50,7 @@ class Move {
         foreach (int[] capture in captures) {
             newPosition.SetPiece(capture[0], capture[1], new EmptyPiece(newPosition));
         }
+        newPosition.enPassant = enPassant;
         return newPosition;
     }
 
@@ -54,10 +60,14 @@ class Move {
         for (int i = 0; i < startXs.Length; i++) {
             string at = $"({startXs[i]}, {startYs[i]})";
             string to = $"({endXs[i]}, {endYs[i]})";
-            output = $"Move piece at {at} to {to}";
+            output = $"Move piece at {at} to {to}\n";
         }
 
-        // TODO Add support for takes and switches
+        
+        foreach (int[] capture in captures) {
+            output += $"Capture piece at ({capture[0]}, {capture[1]})\n";
+        }
+        
         return output;
     }
 }

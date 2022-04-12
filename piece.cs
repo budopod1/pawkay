@@ -42,7 +42,10 @@ class Piece {
                 && move.endYs[0] == endY) {
                 return true;
             }
+            Console.WriteLine(move.endXs[0]);
+            Console.WriteLine(move.endYs[0]);
         }
+        Console.WriteLine("Can't Move (CanMove end)");
         return false;
     }
 
@@ -206,36 +209,63 @@ class Piece {
         y2 = y + direction * 2;
 
         bool noPieceOneAhead = !position.IsPieceAt(x, y1);
-        if (position.IsValid(x, y1) && noPieceOneAhead) {
+        if (Position.IsValid(x, y1) && noPieceOneAhead) {
             allMoves.Add(CreateMove(x, y, x, y1));
         }
-
-        if (!moved && position.IsValid(x, y2) && noPieceOneAhead && !position.IsPieceAt(x, y2)) {
-            allMoves.Add(CreateMove(x, y, x, y2));
+        // Change to use x metric instead of !moved
+        if (!moved && Position.IsValid(x, y2) && noPieceOneAhead && !position.IsPieceAt(x, y2)) {
+            Move move = CreateMove(x, y, x, y2);
+            move.enPassant = new int[] {x, y1};
+            allMoves.Add(move);
         }
 
         int x1 = x - 1;
         int x2 = x + 1;
 
-        if (position.CanMoveTo(x1, y1) && position.IsPieceAt(x1, y1)) {
-            allMoves.Add(CreateMove(x, y, x1, y1));
+        if (position.CanMoveTo(x1, y1)) {
+            if (position.IsPieceAt(x1, y1)) {
+                allMoves.Add(CreateMove(x, y, x1, y1));
+            } else {
+                if (position.enPassant != null
+                    && position.enPassant[0] == x1 && position.enPassant[1] == y1) {
+                    Move move = CreateMove(x, y, x1, y1);
+                    move.captures = new List<int[]>() {new int[] {x1, y}};
+                    allMoves.Add(move);
+                }
+            }
         }
 
         if (position.CanMoveTo(x2, y1) && position.IsPieceAt(x2, y1)) {
             allMoves.Add(CreateMove(x, y, x2, y1));
         }
 
-        // Check for en passant
+        if (position.CanMoveTo(x2, y1)) {
+            if (position.IsPieceAt(x2, y1)) {
+                allMoves.Add(CreateMove(x, y, x2, y1));
+            } else {
+                if (position.enPassant != null
+                    && position.enPassant[0] == x2 && position.enPassant[1] == y1) {
+                    Move move = CreateMove(x, y, x2, y1);
+                    move.captures = new List<int[]>() {new int[] {x2, y}};
+                    allMoves.Add(move);
+                }
+            }
+        }
+
+        /*foreach (Move move in allMoves) {
+            Console.WriteLine(move);
+        }*/
         
         return allMoves;
     }
 
     public List<Move> FilterCheck(int startX, int startY, bool checkCheck, List<Move> unfiltered) {
         List<Move> allMoves = new List<Move>();
-        
         if (checkCheck) {
+            Console.WriteLine(position.ToString(true));
             foreach (Move move in unfiltered) {
                 if (!position.IsKingCheck(move)) {
+                    Console.WriteLine(move.ToString());
                     allMoves.Add(move);
                 }
             }
