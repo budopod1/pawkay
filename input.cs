@@ -5,11 +5,25 @@ using System.Collections.Generic;
 
 class Input {
     public static int Option(string[] options) {
-        int i = 0;
-        foreach (string option in options) {
-            Console.WriteLine($"[{i}] {option}");
-            i++;
+        while (true) {
+            int i = 0;
+            foreach (string option in options) {
+                Console.WriteLine($"[{i}] {option}");
+                i++;
+            }
+            if (int.TryParse(Console.ReadLine(), out int num)) {
+                return num;
+            } else {
+                Console.WriteLine("Invalid option");
+            }
         }
-        return Int32.Parse(Console.ReadLine());
+    }
+
+    public static string PromptDefault(string otherwise) {
+        string output = Console.ReadLine();
+        if (output.Length > 0) {
+            return output;
+        }
+        return otherwise;
     }
 }

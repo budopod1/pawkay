@@ -248,8 +248,32 @@ class Piece {
                 }
             }
         }
+
+        List<Move> finalMoves = new List<Move>();
+        List<PieceType> promoteTo = new List<PieceType>() {
+            PieceType.Queen,
+            PieceType.Bishop,
+            PieceType.Rook,
+            PieceType.Knight
+        };
+        foreach (Move move in allMoves) {
+            bool isAtEnd = false;
+            foreach (int endY in move.endYs) {
+                if (endY == 0 || endY == 7) {
+                    isAtEnd = true;
+                    foreach (PieceType pieceType in promoteTo) {
+                        Move copy = move.Clone();
+                        copy.turnTo = pieceType;
+                        finalMoves.Add(copy);
+                    }
+                }
+            }
+            if (!isAtEnd) {
+                finalMoves.Add(move);
+            }
+        }
         
-        return allMoves;
+        return finalMoves;
     }
 
     public List<Move> FilterCheck(int startX, int startY, bool checkCheck, List<Move> unfiltered) {

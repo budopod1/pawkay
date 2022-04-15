@@ -31,8 +31,9 @@ Bishop - B
         Console.WriteLine("\nIs black bot pawkay or a human?");
         choice = Input.Option(new string[] {"bot", "human"});
         */
-        
-        Position position = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        Console.WriteLine("Enter the FEN (optional)");
+        string FEN = Input.PromptDefault("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        Position position = Position.fromFEN(FEN);
         Console.WriteLine();
         while (true) {
             Console.WriteLine(position);

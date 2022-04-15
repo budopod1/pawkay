@@ -69,4 +69,8 @@ class Move {
         
         return output;
     }
+
+    public Move Clone() {
+        return new Move(startXs, startYs, endXs, endYs, captures, turnTo, enPassant);
+    }
 }
