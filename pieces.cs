@@ -11,7 +11,7 @@ class PawnPiece : Piece {
     }
     
     public override List<Move> AllMoves(int x, int y, bool checkCheck=true) {
-        return FilterCheck(x, y, checkCheck, AllMovesForward(x, y));
+        return FilterCheck(x, y, false, AllMovesForward(x, y));
     }
 }
 

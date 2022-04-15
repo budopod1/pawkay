@@ -31,22 +31,19 @@ class Piece {
         return new List<Move>();
     }
 
-    public bool CanMove(int startX, int startY, int endX, int endY) {
+    public Move CanMove(int startX, int startY, int endX, int endY) {
         if (owner != position.turn) {
-            return false;
+            return null;
         }
 
         foreach (Move move in AllMoves(startX, startY)) {
             if (move.startXs.Length == 1
                 && move.endXs[0] == endX
                 && move.endYs[0] == endY) {
-                return true;
+                return move;
             }
-            Console.WriteLine(move.endXs[0]);
-            Console.WriteLine(move.endYs[0]);
         }
-        Console.WriteLine("Can't Move (CanMove end)");
-        return false;
+        return null;
     }
 
     public Move CreateMove(int x, int y, int endX, int endY) {
@@ -212,8 +209,8 @@ class Piece {
         if (Position.IsValid(x, y1) && noPieceOneAhead) {
             allMoves.Add(CreateMove(x, y, x, y1));
         }
-        // Change to use x metric instead of !moved
-        if (!moved && Position.IsValid(x, y2) && noPieceOneAhead && !position.IsPieceAt(x, y2)) {
+        
+        if ((y == 1 || y == 6) && Position.IsValid(x, y2) && noPieceOneAhead && !position.IsPieceAt(x, y2)) {
             Move move = CreateMove(x, y, x, y2);
             move.enPassant = new int[] {x, y1};
             allMoves.Add(move);
@@ -251,10 +248,6 @@ class Piece {
                 }
             }
         }
-
-        /*foreach (Move move in allMoves) {
-            Console.WriteLine(move);
-        }*/
         
         return allMoves;
     }
@@ -262,10 +255,8 @@ class Piece {
     public List<Move> FilterCheck(int startX, int startY, bool checkCheck, List<Move> unfiltered) {
         List<Move> allMoves = new List<Move>();
         if (checkCheck) {
-            Console.WriteLine(position.ToString(true));
             foreach (Move move in unfiltered) {
                 if (!position.IsKingCheck(move)) {
-                    Console.WriteLine(move.ToString());
                     allMoves.Add(move);
                 }
             }

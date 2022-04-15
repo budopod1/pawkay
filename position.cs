@@ -192,6 +192,13 @@ class Position {
             position.turn = Turn.Black;
         }
 
+        // Castling loading here
+        
+        string enPassant = parts[3];
+        if (enPassant != "-") {
+            position.enPassant = Position.FromSquare(enPassant);
+        }
+
         return position;
     }
 }

@@ -29,7 +29,6 @@ class Move {
     }
 
     public Position Perform(Position oldPosition) {
-        // Console.WriteLine(oldPosition);
         Position newPosition = oldPosition.CopyBoard();
         if (newPosition.turn == Turn.Black) {
             newPosition.turnNum++;

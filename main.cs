@@ -32,7 +32,7 @@ Bishop - B
         choice = Input.Option(new string[] {"bot", "human"});
         */
         
-        Position position = Position.fromFEN("4k3/4p3/8/3P4/8/8/8/4K3 b - - 0 1");
+        Position position = Position.fromFEN("4k3/8/8/3Pp3/8/8/8/4K3 w - e6 0 2");
         Console.WriteLine();
         while (true) {
             Console.WriteLine(position);
@@ -81,9 +81,9 @@ Bishop - B
             */
             
             Piece piece = position.GetPiece(startX, startY);
-            if (piece.CanMove(startX, startY, endX, endY)) {
-                Move toMove = piece.CreateMove(startX, startY, endX, endY);
-                position = toMove.Perform(position);
+            Move possibleMove = piece.CanMove(startX, startY, endX, endY);
+            if (possibleMove != null) {
+                position = possibleMove.Perform(position);
             } else {
                 Console.WriteLine("Invalid move\n");
             }
