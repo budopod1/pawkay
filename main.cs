@@ -2,6 +2,7 @@ using System;
 // using System.Collections;
 using System.Collections.Generic;
 // You can rerun with 'dotnet run --no-build'
+using System.Globalization;
 
 
 class Program {
@@ -13,15 +14,6 @@ class Program {
         }
         Console.WriteLine(@"Welcome to Lincons chess
 Play with bot pawkay or a friend
-White pieces are uppercase
-Black pieces are lower case
-
-King - K
-Pawn - P
-Knight - N
-Queen - Q
-Rook - R
-Bishop - B
         ");
 
         /*
@@ -37,17 +29,16 @@ Bishop - B
         Console.WriteLine();
         while (true) {
             Console.WriteLine(position);
-            Console.WriteLine($"\nIt's {position.turn}'s turn");
+            Console.WriteLine($"It's {position.turn}'s turn");
             Console.WriteLine("Input move: start square then end square (eg. d2d4)");
-            string move = Console.ReadLine();
-            Console.WriteLine();
+            string notatedMove = Console.ReadLine();
 
-            if (move.Length != 4) {
+            if (notatedMove.Length != 4) {
                 Console.WriteLine("Invalid move length");
                 continue;
             }
             
-            int[] start = Position.FromSquare(move.Substring(0, 2));
+            int[] start = Position.FromSquare(notatedMove.Substring(0, 2));
             if (start == null) {
                 Console.WriteLine("Invalid start square");
                 continue;
@@ -55,36 +46,45 @@ Bishop - B
             int startX = start[0];
             int startY = start[1];
             
-            int[] end = Position.FromSquare(move.Substring(2, 2));
+            int[] end = Position.FromSquare(notatedMove.Substring(2, 2));
             if (end == null) {
                 Console.WriteLine("Invalid end square");
                 continue;
             }
             int endX = end[0];
             int endY = end[1];
-
-            /*
-            try {
-                startX = (int)move[0] - 97;
-                startY = Int32.Parse(move[1].ToString()) - 1;
-                endX = (int)move[2] - 97;
-                endY = Int32.Parse(move[3].ToString()) - 1;
-            } catch (System.FormatException) {
-                Console.WriteLine("Move does not use correct format\n");
-                continue;
-            }
-
-            if (!position.IsValid(startX, startY)
-                || !position.IsValid(endX, endY)) {
-                Console.WriteLine("Cannot move a piece not on the board\n");
-                continue;
-            }
-            */
             
             Piece piece = position.GetPiece(startX, startY);
-            Move possibleMove = piece.CanMove(startX, startY, endX, endY);
-            if (possibleMove != null) {
-                position = possibleMove.Perform(position);
+            List<Move> possibleMoves = piece.MovesFromTo(startX, startY, endX, endY);
+            if (possibleMoves.Count >= 0) {
+                if (possibleMoves.Count == 1) {
+                    position = possibleMoves[0].Perform(position);
+                } else {
+                    if ((endY == 0 || endY == 7)
+                        && piece.type == PieceType.Pawn) {
+                        Console.WriteLine("What do you want to promote to?");
+                        PieceType newType;
+                        while(true) {
+                            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                            string newTypeString = Console.ReadLine().ToLower();
+                            newTypeString = textInfo.ToTitleCase(newTypeString);
+                            bool isValid = Enum.TryParse(newTypeString, out newType);
+                            if (isValid
+                                && newType != PieceType.Empty
+                                && newType != PieceType.Copy) {
+                                break;
+                            } else {
+                                Console.WriteLine("Not a piece type");
+                            }
+                        }
+                        foreach (Move move in possibleMoves) {
+                            if (move.turnTo == newType) {
+                                position = move.Perform(position);
+                                break;
+                            }
+                        }
+                    }
+                }
             } else {
                 Console.WriteLine("Invalid move\n");
             }

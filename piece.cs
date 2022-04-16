@@ -31,19 +31,37 @@ class Piece {
         return new List<Move>();
     }
 
-    public Move CanMove(int startX, int startY, int endX, int endY) {
+    public List<Move> MovesFromTo(int startX, int startY, int endX, int endY) {
+        List<Move> allMoves = new List<Move>();
+        
         if (owner != position.turn) {
-            return null;
+            return allMoves;
         }
 
         foreach (Move move in AllMoves(startX, startY)) {
             if (move.startXs.Length == 1
                 && move.endXs[0] == endX
                 && move.endYs[0] == endY) {
-                return move;
+                allMoves.Add(move);
             }
         }
-        return null;
+        
+        return allMoves;
+    }
+
+    public static PieceType FromLetter(string letter) {
+        try {
+            return new Dictionary<string, PieceType>() {
+                {"q", PieceType.Queen},
+                {"p", PieceType.Pawn},
+                {"n", PieceType.Knight},
+                {"k", PieceType.King},
+                {"b", PieceType.Bishop},
+                {"r", PieceType.Rook}
+            }[letter.ToLower()];
+        } catch (KeyNotFoundException) {
+            return PieceType.Empty;
+        }
     }
 
     public Move CreateMove(int x, int y, int endX, int endY) {

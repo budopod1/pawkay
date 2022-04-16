@@ -171,14 +171,7 @@ class Position {
                 } else {
                     char piece = char.ToLower(pieceChar);
                     Turn pieceOwner = pieceChar == piece ? Turn.Black : Turn.White;
-                    PieceType pieceType = new Dictionary<char, PieceType>() {
-                        {'k', PieceType.King},
-                        {'p', PieceType.Pawn},
-                        {'n', PieceType.Knight},
-                        {'b', PieceType.Bishop},
-                        {'q', PieceType.Queen},
-                        {'r', PieceType.Rook}
-                    }[piece];
+                    PieceType pieceType = Piece.FromLetter(piece.ToString());
                     position.SetPiece(x, y, Piece.Create(pieceType, pieceOwner, position));
                     x += 1;
                 }
