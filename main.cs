@@ -28,6 +28,12 @@ Play with bot pawkay or a friend
         Position position = Position.fromFEN(FEN);
         Console.WriteLine();
         while (true) {
+            // TEST
+            Console.WriteLine(position.whiteQueenside);
+            Console.WriteLine(position.whiteKingside);
+            Console.WriteLine(position.blackQueenside);
+            Console.WriteLine(position.blackKingside);
+            
             Console.WriteLine(position);
             Console.WriteLine($"It's {position.turn}'s turn");
             Console.WriteLine("Input move: start square then end square (eg. d2d4)");
@@ -56,7 +62,7 @@ Play with bot pawkay or a friend
             
             Piece piece = position.GetPiece(startX, startY);
             List<Move> possibleMoves = piece.MovesFromTo(startX, startY, endX, endY);
-            if (possibleMoves.Count >= 0) {
+            if (possibleMoves.Count > 0) {
                 if (possibleMoves.Count == 1) {
                     position = possibleMoves[0].Perform(position);
                 } else {
@@ -83,6 +89,8 @@ Play with bot pawkay or a friend
                                 break;
                             }
                         }
+                    } else {
+                        throw new NotImplementedException();
                     }
                 }
             } else {

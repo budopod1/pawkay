@@ -117,7 +117,7 @@ class Piece {
         return allMoves;
     }
 
-    public List<Move> AllMovesL(int x, int y) {
+    public List<Move> AllMovesKnight(int x, int y) {
         List<int[]> lPaterns = new List<int[]> {
             new int[] {2, 1},
             new int[] {2, -1},
@@ -198,7 +198,7 @@ class Piece {
         return allMoves;
     }
 
-    public List<Move> AllMovesAdjacent(int x, int y) {
+    public List<Move> AllMovesKing(int x, int y) {
         List<Move> allMoves = new List<Move>();
         
         for (int xc = -1; xc <= 1; xc++) {
@@ -212,7 +212,7 @@ class Piece {
         return allMoves;
     }
 
-    public List<Move> AllMovesForward(int x, int y) {
+    public List<Move> AllMovesPawn(int x, int y) {
         int direction = (owner == Turn.Black) ? -1 : 1;
 
         List<Move> allMoves = new List<Move>();

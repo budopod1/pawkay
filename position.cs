@@ -6,8 +6,14 @@ using System.Collections.Generic;
 class Position {
     Piece[,] board = new Piece[8, 8];
     public Turn turn = Turn.White;
+    
     public int turnNum = 1;
     public int[] enPassant = null;
+    public bool whiteKingside = true;
+    public bool whiteQueenside = true;
+    public bool blackKingside = true;
+    public bool blackQueenside = true;
+    
     
     public Position() {
         for (int x = 0; x < 8; x++) {
@@ -84,6 +90,7 @@ class Position {
 
     public Position CopyBoard() {
         Position boardCopy = new Position();
+        
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Piece piece = GetPiece(x, y);
@@ -92,7 +99,16 @@ class Position {
                 boardCopy.SetPiece(x, y, piece);
             }
         }
+        
         boardCopy.turn = turn;
+        boardCopy.turnNum = turnNum;
+        boardCopy.enPassant = enPassant;
+        
+        boardCopy.whiteKingside = whiteKingside;
+        boardCopy.whiteQueenside = whiteQueenside;
+        boardCopy.blackKingside = blackKingside;
+        boardCopy.blackQueenside = blackQueenside;
+        
         return boardCopy;
     }
 
@@ -118,24 +134,13 @@ class Position {
     }
 
     public override string ToString() {
-        return ToString();
-    }
-
-    public string ToString(bool debugOut=false) {
         string text = "   ";
         for (int x = 0; x < 8; x++) {
-            if (debugOut) {
-                text += x;
-            } else {
-                text += (char)(x + 97);
-            }
+            text += (char)(x + 97);
         }
         text += "\n\n";
         for (int y = 8; y > 0; y--) {
             int outY = y;
-            if (debugOut) {
-                outY -= 1;
-            }
             text += $"{outY}  ";
             for (int x = 0; x < 8; x++) {
                 text += GetPiece(x, y - 1).GetIcon();
@@ -144,11 +149,7 @@ class Position {
         }
         text += "\n   ";
         for (int x = 0; x < 8; x++) {
-            if (debugOut) {
-                text += x;
-            } else {
-                text += (char)(x + 97);
-            }
+            text += (char)(x + 97);
         }
         return text;
     }
