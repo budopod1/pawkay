@@ -11,7 +11,7 @@ class PawnPiece : Piece {
     }
     
     public override List<Move> AllMoves(int x, int y, bool checkCheck=true) {
-        return FilterCheck(x, y, false, AllMovesPawn(x, y));
+        return FilterCheck(x, y, checkCheck, AllMovesPawn(x, y)); // NOT WORKING
     }
 }
 
@@ -50,7 +50,7 @@ class KingPiece : Piece {
     }
     
     public override List<Move> AllMoves(int x, int y, bool checkCheck=true) {
-        return FilterCheck(x, y, checkCheck, AllMovesKing(x, y));
+        return FilterCheck(x, y, checkCheck, AllMovesKing(x, y, checkCheck));
     }
 }
 

@@ -39,11 +39,16 @@ class Piece {
         }
 
         foreach (Move move in AllMoves(startX, startY)) {
-            if (move.startXs.Length == 1
-                && move.endXs[0] == endX
-                && move.endYs[0] == endY) {
-                allMoves.Add(move);
+            for (int i = 0; i < move.startXs.Length; i++) {
+                if (move.endXs[i] == endX && move.endYs[i] == endY) {
+                    allMoves.Add(move);
+                    break;
+                }
             }
+            // if (move.startXs.Length == 1
+            //     && move.endXs[0] == endX
+            //     && move.endYs[0] == endY) {
+            // }
         }
         
         return allMoves;
@@ -79,7 +84,11 @@ class Piece {
             if (right) {
                 int xp = x + i;
                 int yp = y;
+                
                 if (position.CanMoveTo(xp, yp)) {
+                    if (position.IsPieceAt(xp, yp)) {
+                        right = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xp, yp));
                 } else {
                     right = false;
@@ -88,7 +97,11 @@ class Piece {
             if (left) {
                 int xp = x - i;
                 int yp = y;
+                
                 if (position.CanMoveTo(xp, yp)) {
+                    if (position.IsPieceAt(xp, yp)) {
+                        left = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xp, yp));
                 } else {
                     left = false;
@@ -97,7 +110,11 @@ class Piece {
             if (up) {
                 int xp = x;
                 int yp = y - i;
+                
                 if (position.CanMoveTo(xp, yp)) {
+                    if (position.IsPieceAt(xp, yp)) {
+                        up = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xp, yp));
                 } else {
                     up = false;
@@ -106,7 +123,11 @@ class Piece {
             if (down) {
                 int xp = x;
                 int yp = y + i;
+                
                 if (position.CanMoveTo(xp, yp)) {
+                    if (position.IsPieceAt(xp, yp)) {
+                        down = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xp, yp));
                 } else {
                     down = false;
@@ -156,8 +177,11 @@ class Piece {
             if (upRight) {
                 xCoord = x + i;
                 yCoord = y - i;
-
+                
                 if (position.CanMoveTo(xCoord, yCoord)) {
+                    if (position.IsPieceAt(xCoord, yCoord)) {
+                        upRight = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xCoord, yCoord));
                 } else {
                     upRight = false;
@@ -166,8 +190,11 @@ class Piece {
             if (upLeft) {
                 xCoord = x - i;
                 yCoord = y - i;
-
+                
                 if (position.CanMoveTo(xCoord, yCoord)) {
+                    if (position.IsPieceAt(xCoord, yCoord)) {
+                        upLeft = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xCoord, yCoord));
                 } else {
                     upLeft = false;
@@ -176,8 +203,11 @@ class Piece {
             if (downRight) {
                 xCoord = x + i;
                 yCoord = y + i;
-
+                
                 if (position.CanMoveTo(xCoord, yCoord)) {
+                    if (position.IsPieceAt(xCoord, yCoord)) {
+                        downRight = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xCoord, yCoord));
                 } else {
                     downRight = false;
@@ -186,8 +216,11 @@ class Piece {
             if (downLeft) {
                 xCoord = x - i;
                 yCoord = y + i;
-
+                
                 if (position.CanMoveTo(xCoord, yCoord)) {
+                    if (position.IsPieceAt(xCoord, yCoord)) {
+                        downLeft = false;
+                    }
                     allMoves.Add(CreateMove(x, y, xCoord, yCoord));
                 } else {
                     downLeft = false;
@@ -198,7 +231,7 @@ class Piece {
         return allMoves;
     }
 
-    public List<Move> AllMovesKing(int x, int y) {
+    public List<Move> AllMovesKing(int x, int y, bool checkCheck=true) {
         List<Move> allMoves = new List<Move>();
         
         for (int xc = -1; xc <= 1; xc++) {
@@ -206,6 +239,70 @@ class Piece {
                 if (position.CanMoveTo(xc + x, yc + y)) {
                     allMoves.Add(CreateMove(x, y, xc + x, yc + y));
                 }
+            }
+        }
+
+        if (!checkCheck) {
+            return allMoves;
+        }
+
+        bool kingside = false;
+        bool queenside = false;
+        int kingEndX = 0;
+        int rookStartX = 0;
+        int rookEndX = 0;
+        
+        if (owner == Turn.White) {
+            kingside = position.whiteKingside;
+            queenside = position.whiteQueenside;
+        } else if (owner == Turn.Black) {
+            kingside = position.blackKingside;
+            queenside = position.blackQueenside;
+        }
+
+        if (kingside) {
+            kingEndX = 6;
+            rookStartX = 7;
+            rookEndX = 5;
+
+            int kingStart = Math.Min(x, kingEndX);
+            int kingEnd = Math.Max(x, kingEndX);
+            
+            // < because last pos is check auto
+            for (int i = kingStart; i <= kingEnd; i++) {
+                kingside = !position.IsCheckAt(i, y, true) && kingside;
+            }
+
+            if (kingside) {
+                allMoves.Add(new Move(
+                    new int[] {x, rookStartX},
+                    new int[] {y, y},
+                    new int[] {kingEndX, rookEndX},
+                    new int[] {y, y}
+                ));
+            }
+        }
+        
+        if (queenside) {
+            kingEndX = 2;
+            rookStartX = 0;
+            rookEndX = 3;
+
+            int kingStart = Math.Min(x, kingEndX);
+            int kingEnd = Math.Max(x, kingEndX);
+            
+            // < because last pos is check auto
+            for (int i = kingStart; i <= kingEnd; i++) {
+                kingside = !position.IsCheckAt(i, y, true) && kingside;
+            }
+
+            if (kingside) {
+                allMoves.Add(new Move(
+                    new int[] {x, rookStartX},
+                    new int[] {y, y},
+                    new int[] {kingEndX, rookEndX},
+                    new int[] {y, y}
+                ));
             }
         }
 

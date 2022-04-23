@@ -1,8 +1,12 @@
 using System;
 // using System.Collections;
 using System.Collections.Generic;
-// You can rerun with 'dotnet run --no-build'
 using System.Globalization;
+// You can rerun with 'dotnet run --no-build'
+
+
+// r3k2r/1pppp1pp/8/p6B/2b5/3P4/PPP2PPP/R4RK1 b kq - 1 3
+// g7g6
 
 
 class Program {
@@ -28,12 +32,6 @@ Play with bot pawkay or a friend
         Position position = Position.fromFEN(FEN);
         Console.WriteLine();
         while (true) {
-            // TEST
-            Console.WriteLine(position.whiteQueenside);
-            Console.WriteLine(position.whiteKingside);
-            Console.WriteLine(position.blackQueenside);
-            Console.WriteLine(position.blackKingside);
-            
             Console.WriteLine(position);
             Console.WriteLine($"It's {position.turn}'s turn");
             Console.WriteLine("Input move: start square then end square (eg. d2d4)");
@@ -59,6 +57,8 @@ Play with bot pawkay or a friend
             }
             int endX = end[0];
             int endY = end[1];
+
+            // Console.WriteLine($"{startX},{startY} {endX},{endY}");
             
             Piece piece = position.GetPiece(startX, startY);
             List<Move> possibleMoves = piece.MovesFromTo(startX, startY, endX, endY);

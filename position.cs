@@ -78,9 +78,13 @@ class Position {
         int[] kingPosition = moved.GetKing(turn);
         int kingX = kingPosition[0];
         int kingY = kingPosition[1];
-        foreach (Move move in moved.AllMoves(false)) {
+        return moved.IsCheckAt(kingX, kingY);
+    }
+
+    public bool IsCheckAt(int x, int y, bool switchTurn=false) {
+        foreach (Move move in AllMoves(false, !switchTurn)) {
             for (int i = 0; i < move.endXs.Length; i++) {
-                if (move.endXs[i] == kingX && move.endYs[i] == kingY) {
+                if (move.endXs[i] == x && move.endYs[i] == y) {
                     return true;
                 }
             }
@@ -120,12 +124,16 @@ class Position {
         }
     }
 
-    public List<Move> AllMoves(bool checkCheck=true) {
+    public List<Move> AllMoves(bool checkCheck=true, bool currentTurn=true) {
         List<Move> allMoves = new List<Move>();
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Piece piece = GetPiece(x, y);
-                if (piece.exists && piece.owner == turn) {
+                bool sameTurn = piece.owner == turn;
+                if (!currentTurn) {
+                    sameTurn = !sameTurn;
+                }
+                if (piece.exists && sameTurn) {
                     allMoves.AddRange(piece.AllMoves(x, y, checkCheck));
                 }
             }
