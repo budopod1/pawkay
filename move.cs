@@ -95,7 +95,9 @@ class Move {
         for (int i = 0; i < startXs.Length; i++) {
             string at = $"({startXs[i]}, {startYs[i]})";
             string to = $"({endXs[i]}, {endYs[i]})";
-            output = $"Move piece at {at} to {to}\n";
+            string start = Position.ToSquare(startXs[i], startYs[i]);
+            string end = Position.ToSquare(endXs[i], endYs[i]);
+            output += $"Move piece at {at} to {to} ({start}{end})\n";
         }
 
         

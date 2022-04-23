@@ -5,10 +5,6 @@ using System.Globalization;
 // You can rerun with 'dotnet run --no-build'
 
 
-// r3k2r/1pppp1pp/8/p6B/2b5/3P4/PPP2PPP/R4RK1 b kq - 1 3
-// g7g6
-
-
 class Program {
     public static void Main(string[] args) {
         Console.BackgroundColor = ConsoleColor.White;
@@ -90,6 +86,9 @@ Play with bot pawkay or a friend
                             }
                         }
                     } else {
+                        foreach (Move move in possibleMoves) {
+                            Console.WriteLine(move);
+                        }
                         throw new NotImplementedException();
                     }
                 }

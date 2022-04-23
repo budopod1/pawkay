@@ -40,7 +40,8 @@ class Piece {
 
         foreach (Move move in AllMoves(startX, startY)) {
             for (int i = 0; i < move.startXs.Length; i++) {
-                if (move.endXs[i] == endX && move.endYs[i] == endY) {
+                if (move.endXs[i] == endX && move.endYs[i] == endY
+                   && move.startXs[i] == startX && move.startYs[i] == startY) {
                     allMoves.Add(move);
                     break;
                 }
@@ -293,10 +294,10 @@ class Piece {
             
             // < because last pos is check auto
             for (int i = kingStart; i <= kingEnd; i++) {
-                kingside = !position.IsCheckAt(i, y, true) && kingside;
+                queenside = !position.IsCheckAt(i, y, true) && queenside;
             }
 
-            if (kingside) {
+            if (queenside) {
                 allMoves.Add(new Move(
                     new int[] {x, rookStartX},
                     new int[] {y, y},

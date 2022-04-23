@@ -41,6 +41,10 @@ class Position {
         }
     }
 
+    public static string ToSquare(int x, int y) {
+        return ((char)(x + 97)).ToString() + (y + 1).ToString();
+    }
+
     public static bool IsValid(int x, int y) {
         return !(x > 7 || y > 7 || x < 0 || y < 0);
     }
