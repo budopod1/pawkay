@@ -1,49 +1,17 @@
 using System;
 // using System.Collections;
 using System.Collections.Generic;
-// You can rerun with 'dotnet run --no-build'
+using System.Globalization;
 
 
-class Program {
-    public static void Main(string[] args) {
-        Console.BackgroundColor = ConsoleColor.White;
-        Console.ForegroundColor = ConsoleColor.Black;
-        for (int i = 0; i <= 100; i++) {
-            Console.WriteLine();
-        }
-        Console.WriteLine(@"Welcome to Lincons chess
-Play with bot pawkay or a friend
-        ");
-
-        /*
-        int choice;
-        Console.WriteLine("\nIs white bot pawkay or a human?");
-        choice = Input.Option(new string[] {"bot", "human"});
-        Console.WriteLine("\nIs black bot pawkay or a human?");
-        choice = Input.Option(new string[] {"bot", "human"});
-        */
-        Player white = new Human(Turn.White);
-        Player black = new Human(Turn.Black);
-        
-        Console.WriteLine("Enter the FEN (optional)");
-        string FEN = Input.PromptDefault("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-        Position position = Position.fromFEN(FEN);
-        Console.WriteLine();
+class Human : Player {
+    public Human(Turn turn) : base(turn) {}
+                      
+    public override Move ChooseMove(Position position) {
         while (true) {
-            Console.WriteLine(position);
-            Console.WriteLine($"It's {position.turn}'s turn");
-            
-            // Check for game over here
-            
-            if (position.turn == Turn.White) {
-                position = white.ChooseMove(position).Perform(position);
-            } else if (position.turn == Turn.Black) {
-                position = black.ChooseMove(position).Perform(position);
-            }
-            /*
             Console.WriteLine("Input move: start square then end square (eg. d2d4)");
             string notatedMove = Console.ReadLine();
-
+    
             if (notatedMove.Length != 4) {
                 Console.WriteLine("Invalid move length");
                 continue;
@@ -64,14 +32,14 @@ Play with bot pawkay or a friend
             }
             int endX = end[0];
             int endY = end[1];
-
+    
             // Console.WriteLine($"{startX},{startY} {endX},{endY}");
             
             Piece piece = position.GetPiece(startX, startY);
             List<Move> possibleMoves = piece.MovesFromTo(startX, startY, endX, endY);
             if (possibleMoves.Count > 0) {
                 if (possibleMoves.Count == 1) {
-                    position = possibleMoves[0].Perform(position);
+                    return possibleMoves[0];
                 } else {
                     if ((endY == 0 || endY == 7)
                         && piece.type == PieceType.Pawn) {
@@ -92,21 +60,16 @@ Play with bot pawkay or a friend
                         }
                         foreach (Move move in possibleMoves) {
                             if (move.turnTo == newType) {
-                                position = move.Perform(position);
-                                break;
+                                return move;
                             }
                         }
                     } else {
-                        foreach (Move move in possibleMoves) {
-                            Console.WriteLine(move);
-                        }
                         throw new NotImplementedException();
                     }
                 }
             } else {
-                Console.WriteLine("Invalid move\n");
+                Console.WriteLine("Invalid move");
             }
-            */
         }
     }
 }
