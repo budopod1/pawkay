@@ -4,6 +4,18 @@ using System.Collections.Generic;
 // You can rerun with 'dotnet run --no-build'
 
 
+// 
+// d2d4
+// e7e5
+// h2h3
+// f8b4
+// h3h4 - null reference
+
+
+// 
+// e1g1
+
+
 class Program {
     public static void Main(string[] args) {
         Console.BackgroundColor = ConsoleColor.White;
@@ -11,6 +23,7 @@ class Program {
         for (int i = 0; i <= 100; i++) {
             Console.WriteLine();
         }
+        
         Console.WriteLine(@"Welcome to Lincons chess
 Play with bot pawkay or a friend
         ");
@@ -31,14 +44,26 @@ Play with bot pawkay or a friend
         Console.WriteLine();
         while (true) {
             Console.WriteLine(position);
-            Console.WriteLine($"It's {position.turn}'s turn");
             
-            // Check for game over here
-            
-            if (position.turn == Turn.White) {
-                position = white.ChooseMove(position).Perform(position);
-            } else if (position.turn == Turn.Black) {
-                position = black.ChooseMove(position).Perform(position);
+            if (position.AllMoves().Count != 0) {
+                Console.WriteLine($"It's {position.turn}'s turn");
+                
+                if (position.turn == Turn.White) {
+                    position = white.ChooseMove(position).Perform(position);
+                } else if (position.turn == Turn.Black) {
+                    position = black.ChooseMove(position).Perform(position);
+                }
+            } else {
+                if (position.IsKingCheck()) {
+                    if (position.turn == Turn.White) {
+                        Console.WriteLine($"Win for Black!");
+                    } else if (position.turn == Turn.Black) {
+                        Console.WriteLine($"Win for White!");
+                    }
+                } else {
+                    Console.WriteLine("Draw!");
+                }
+                break;
             }
             /*
             Console.WriteLine("Input move: start square then end square (eg. d2d4)");
