@@ -4,18 +4,6 @@ using System.Collections.Generic;
 // You can rerun with 'dotnet run --no-build'
 
 
-// 
-// d2d4
-// e7e5
-// h2h3
-// f8b4
-// h3h4 - null reference
-
-
-// 
-// e1g1
-
-
 class Program {
     public static void Main(string[] args) {
         Console.BackgroundColor = ConsoleColor.White;

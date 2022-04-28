@@ -271,6 +271,11 @@ class Piece {
             
             // < because last pos is check auto
             for (int i = kingStart; i <= kingEnd; i++) {
+                if (i != 0 && i != 7 && i != 4) {
+                    if (position.GetPiece(i, y).exists) {
+                        kingside = false;
+                    }
+                }
                 kingside = !position.IsCheckAt(i, y, true) && kingside;
             }
 
@@ -294,6 +299,11 @@ class Piece {
             
             // < because last pos is check auto
             for (int i = kingStart; i <= kingEnd; i++) {
+                if (i != 0 && i != 7 && i != 4) {
+                    if (position.GetPiece(i, y).exists) {
+                        queenside = false;
+                    }
+                }
                 queenside = !position.IsCheckAt(i, y, true) && queenside;
             }
 
