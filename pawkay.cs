@@ -53,8 +53,14 @@ class Pawkay : Player {
                 }
             }
             if (bestScore == null) {
-                Console.WriteLine(position);
-                throw new NotImplementedException("???????????????");
+                if (position.IsKingCheck(true)) {
+                    if (position.turn == turn) {
+                        return double.NegativeInfinity;
+                    } else {
+                        return double.PositiveInfinity;
+                    }
+                }
+                return 0;
             }
             return (double)bestScore;
             /*

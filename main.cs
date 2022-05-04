@@ -27,7 +27,7 @@ Play with bot pawkay or a friend
         choice = Input.Option(new string[] {"bot", "human"});
         */
         Player white = new Human(Turn.White);
-        Player black = new Pawkay(Turn.Black, 3, PawkayVersion.A);
+        Player black = new Pawkay(Turn.Black, 2, PawkayVersion.A);
         
         Console.WriteLine("Enter the FEN (optional)");
         string FEN = Input.PromptDefault("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -45,7 +45,7 @@ Play with bot pawkay or a friend
                     position = black.ChooseMove(position).Perform(position);
                 }
             } else {
-                if (position.IsKingCheck()) {
+                if (position.IsKingCheck(true)) {
                     if (position.turn == Turn.White) {
                         Console.WriteLine($"Win for Black!");
                     } else if (position.turn == Turn.Black) {

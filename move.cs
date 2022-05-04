@@ -97,12 +97,15 @@ class Move {
             string to = $"({endXs[i]}, {endYs[i]})";
             string start = Position.ToSquare(startXs[i], startYs[i]);
             string end = Position.ToSquare(endXs[i], endYs[i]);
-            output += $"Move piece at {at} to {to} ({start}{end})\n";
+            if (i != 0) {
+                output += "\n";
+            }
+            output += $"Move piece at {at} to {to} ({start}{end})";
         }
 
         
         foreach (int[] capture in captures) {
-            output += $"Capture piece at ({capture[0]}, {capture[1]})\n";
+            output += $"\nCapture piece at ({capture[0]}, {capture[1]})";
         }
         
         return output;

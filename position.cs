@@ -81,11 +81,11 @@ class Position {
         return moveToCheck.Perform(this).IsKingCheck();
     }
 
-    public bool IsKingCheck() {
+    public bool IsKingCheck(bool switchTurn=false) {
         int[] kingPosition = GetKing(turn == Turn.White ? Turn.Black : Turn.White);
         int kingX = kingPosition[0];
         int kingY = kingPosition[1];
-        return IsCheckAt(kingX, kingY);
+        return IsCheckAt(kingX, kingY, switchTurn);
     }
 
     public bool IsCheckAt(int x, int y, bool switchTurn=false) {
