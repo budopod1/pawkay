@@ -269,7 +269,6 @@ class Piece {
             int kingStart = Math.Min(x, kingEndX);
             int kingEnd = Math.Max(x, kingEndX);
             
-            // < because last pos is check auto
             for (int i = kingStart; i <= kingEnd; i++) {
                 if (i != 0 && i != 7 && i != 4) {
                     if (position.GetPiece(i, y).exists) {
@@ -297,7 +296,6 @@ class Piece {
             int kingStart = Math.Min(x, kingEndX);
             int kingEnd = Math.Max(x, kingEndX);
             
-            // < because last pos is check auto
             for (int i = kingStart; i <= kingEnd; i++) {
                 if (i != 0 && i != 7 && i != 4) {
                     if (position.GetPiece(i, y).exists) {
@@ -358,9 +356,9 @@ class Piece {
             }
         }
 
-        if (position.CanMoveTo(x2, y1) && position.IsPieceAt(x2, y1)) {
-            allMoves.Add(CreateMove(x, y, x2, y1));
-        }
+        // if (position.CanMoveTo(x2, y1) && position.IsPieceAt(x2, y1)) {
+        //     allMoves.Add(CreateMove(x, y, x2, y1));
+        // }
 
         if (position.CanMoveTo(x2, y1)) {
             if (position.IsPieceAt(x2, y1)) {

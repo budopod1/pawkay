@@ -1,6 +1,7 @@
 using System;
 // using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 // You can rerun with 'dotnet run --no-build'
 
 
@@ -11,6 +12,8 @@ class Program {
         for (int i = 0; i <= 100; i++) {
             Console.WriteLine();
         }
+        
+        // Program.Test();
         
         Console.WriteLine(@"Welcome to Lincons chess
 Play with bot pawkay or a friend
@@ -24,7 +27,7 @@ Play with bot pawkay or a friend
         choice = Input.Option(new string[] {"bot", "human"});
         */
         Player white = new Human(Turn.White);
-        Player black = new Human(Turn.Black);
+        Player black = new Pawkay(Turn.Black, 3, PawkayVersion.A);
         
         Console.WriteLine("Enter the FEN (optional)");
         string FEN = Input.PromptDefault("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -53,73 +56,40 @@ Play with bot pawkay or a friend
                 }
                 break;
             }
-            /*
-            Console.WriteLine("Input move: start square then end square (eg. d2d4)");
-            string notatedMove = Console.ReadLine();
-
-            if (notatedMove.Length != 4) {
-                Console.WriteLine("Invalid move length");
-                continue;
-            }
-            
-            int[] start = Position.FromSquare(notatedMove.Substring(0, 2));
-            if (start == null) {
-                Console.WriteLine("Invalid start square");
-                continue;
-            }
-            int startX = start[0];
-            int startY = start[1];
-            
-            int[] end = Position.FromSquare(notatedMove.Substring(2, 2));
-            if (end == null) {
-                Console.WriteLine("Invalid end square");
-                continue;
-            }
-            int endX = end[0];
-            int endY = end[1];
-
-            // Console.WriteLine($"{startX},{startY} {endX},{endY}");
-            
-            Piece piece = position.GetPiece(startX, startY);
-            List<Move> possibleMoves = piece.MovesFromTo(startX, startY, endX, endY);
-            if (possibleMoves.Count > 0) {
-                if (possibleMoves.Count == 1) {
-                    position = possibleMoves[0].Perform(position);
-                } else {
-                    if ((endY == 0 || endY == 7)
-                        && piece.type == PieceType.Pawn) {
-                        Console.WriteLine("What do you want to promote to?");
-                        PieceType newType;
-                        while(true) {
-                            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                            string newTypeString = Console.ReadLine().ToLower();
-                            newTypeString = textInfo.ToTitleCase(newTypeString);
-                            bool isValid = Enum.TryParse(newTypeString, out newType);
-                            if (isValid
-                                && newType != PieceType.Empty
-                                && newType != PieceType.Copy) {
-                                break;
-                            } else {
-                                Console.WriteLine("Not a piece type");
-                            }
-                        }
-                        foreach (Move move in possibleMoves) {
-                            if (move.turnTo == newType) {
-                                position = move.Perform(position);
-                                break;
-                            }
-                        }
-                    } else {
-                        foreach (Move move in possibleMoves) {
-                            Console.WriteLine(move);
-                        }
-                        throw new NotImplementedException();
-                    }
-                }
-            } else {
-                Console.WriteLine("Invalid move\n");
-            }
-            */
         }
+    }
+
+    public static void Test() {
+        Position position = Position.fromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        Move move = null;
+        for (int i = 0; i < 1000; i++) {
+            move = position.AllMoves()[0];
+        }
+        timer.Stop();
+
+        Console.WriteLine($"AllMoves: {timer.ElapsedMilliseconds/1000.0}");
+
+        timer = new Stopwatch();
+        timer.Start();
+        for (int i = 0; i < 1000; i++) {
+            move.Perform(position);
+        }
+        timer.Stop();
+
+        Console.WriteLine($"Perform: {timer.ElapsedMilliseconds/1000.0}");
+
+        Pawkay bot = new Pawkay(Turn.Black, 5);
+
+        timer = new Stopwatch();
+        timer.Start();
+        for (int i = 0; i < 1000; i++) {
+            bot.ScorePosition(position);
+        }
+        timer.Stop();
+
+        Console.WriteLine($"ScorePosition: {timer.ElapsedMilliseconds/1000.0}");
     }
 }

@@ -64,6 +64,9 @@ class Human : Player {
                             }
                         }
                     } else {
+                        foreach (Move move in possibleMoves) {
+                            Console.WriteLine(move);
+                        }
                         throw new NotImplementedException();
                     }
                 }
